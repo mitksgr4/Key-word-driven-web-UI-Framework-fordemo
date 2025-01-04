@@ -8,6 +8,7 @@ import java.util.Properties;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class Base {
 	
@@ -30,6 +31,15 @@ public class Base {
 			{
 				driver=new ChromeDriver();
 			}
+		}
+		
+		if(browserName.equals("firefox"))
+		{
+			System.setProperty("webdriver.gecko.driver","D:\\Driver\\geckodriver.exe");
+			
+			
+				driver=new FirefoxDriver();
+			
 		}
 		return driver;
 	}

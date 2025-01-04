@@ -15,5 +15,13 @@ public class LoginTest {
 		keyWordEngine.startExecution("login");
 	}
 	
+	@Test
+	public void SignUpTest()
+	{
+		keyWordEngine = new KeyWordEngine();
+		
+		keyWordEngine.startExecution("signup");
+	}
+	
 
 }

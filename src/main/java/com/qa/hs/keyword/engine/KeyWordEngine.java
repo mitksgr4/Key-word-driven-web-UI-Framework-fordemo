@@ -31,8 +31,8 @@ public class KeyWordEngine {
 	
 	public void startExecution(String SheetName)
 	{
-		String LocatorName=null;
-		String LocatorValue=null;
+		//String locatorType=null;
+		//String locatorValue=null;
 		
 		FileInputStream file=null;
 		try {
@@ -57,15 +57,10 @@ public class KeyWordEngine {
 		for(int i=0;i<sheet.getLastRowNum();i++)
 		{
 			try {
-			String locatorcolvalue=sheet.getRow(i+1).getCell(k+1).toString().trim();
-			if(!locatorcolvalue.equalsIgnoreCase("NA")) 
-			{
-				LocatorName=locatorcolvalue.split("=")[0].trim(); //id
-				LocatorValue=locatorcolvalue.split("=")[1].trim(); //username
-			}
-			
-			String action=sheet.getRow(i+1).getCell(k+2).toString().trim();
-			String value=sheet.getRow(i+1).getCell(k+3).toString().trim();
+			String locatorType=sheet.getRow(i+1).getCell(k+1).toString().trim();
+			String locatorValue=sheet.getRow(i+1).getCell(k+2).toString().trim();
+			String action=sheet.getRow(i+1).getCell(k+3).toString().trim();
+			String value=sheet.getRow(i+1).getCell(k+4).toString().trim();
 			
 			switch (action) {
 			case "open browser":
@@ -90,18 +85,19 @@ public class KeyWordEngine {
 				{
 					driver.get(value);
 				}
+				break;
 				
-			/*case "quit":
+			case "quit":
 			driver.quit();
-			break; */
+			break; 
 
 			default:
 				break;
 			}
 			
-			switch (LocatorName) {
+			switch (locatorType) {
 			case "id":
-				 element=driver.findElement(By.id(LocatorValue));
+				 element=driver.findElement(By.id(locatorValue));
 				if(action.equalsIgnoreCase("sendkeys"))
 				{
 					element.clear();
@@ -110,13 +106,95 @@ public class KeyWordEngine {
 				else if(action.equalsIgnoreCase("click")){
 					element.click();
 				}
-				LocatorName=null;
+				else if(action.equalsIgnoreCase("isDisplayed"))
+				{
+					element.isDisplayed();
+				}
+				else if(action.equalsIgnoreCase("getText"))
+				{
+					String elementText=element.getText();
+					Thread.sleep(2000);
+					System.out.println("text of element :"+elementText);
+				}
+				locatorType=null;
+				break;
+				
+			case "name":
+				 element=driver.findElement(By.name(locatorValue));
+				if(action.equalsIgnoreCase("sendkeys"))
+				{
+					element.clear();
+					element.sendKeys(value);
+				}
+				else if(action.equalsIgnoreCase("click")){
+					element.click();
+				}
+				else if(action.equalsIgnoreCase("isDisplayed"))
+				{
+					element.isDisplayed();
+				}
+				else if(action.equalsIgnoreCase("getText"))
+				{
+					String elementText=element.getText();
+					System.out.println("text of element :"+elementText);
+				}
+				locatorType=null;
+				break;
+				
+			case "xpath":
+			element=driver.findElement(By.xpath(locatorValue));
+			if(action.equalsIgnoreCase("sendkeys"))
+			{
+				element.clear();
+				element.sendKeys(value);
+			}
+			else if(action.equalsIgnoreCase("click")){
+				element.click();
+			}
+			else if(action.equalsIgnoreCase("isDisplayed"))
+			{
+				element.isDisplayed();
+			}
+			else if(action.equalsIgnoreCase("getText"))
+			{
+				String elementText=element.getText();
+				System.out.println("text of element :"+elementText);
+			}
+			locatorType=null;
+			break;
+			
+			case "cssSelector":
+				element=driver.findElement(By.cssSelector(locatorValue));
+				if(action.equalsIgnoreCase("sendkeys"))
+				{
+					element.clear();
+					element.sendKeys(value);
+				}
+				else if(action.equalsIgnoreCase("click")){
+					element.click();
+				}
+				else if(action.equalsIgnoreCase("isDisplayed"))
+				{
+					element.isDisplayed();
+				}
+				else if(action.equalsIgnoreCase("getText"))
+				{
+					String elementText=element.getText();
+					System.out.println("text of element :"+elementText);
+				}
+				locatorType=null;
 				break;
 				
 			case "LinkText":
-				 element=driver.findElement(By.linkText(LocatorValue));
+				 element=driver.findElement(By.linkText(locatorValue));
 				 element.click();
-				LocatorName=null;
+				 locatorType=null;
+				 break;
+				
+			case "partialLinkText":
+				 element=driver.findElement(By.partialLinkText(locatorValue));
+				 element.click();
+				 locatorType=null;
 				 break;
 
 			default:
